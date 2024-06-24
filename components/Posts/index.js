@@ -35,23 +35,31 @@ const LoadMoreButton = styled.button(() => ({
 export default function Posts() {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [start, setStart] = useState(0);
+  const [limit, setLimit] = useState(10);
   const { isSmallerDevice } = useWindowWidth();
 
   useEffect(() => {
-    const fetchPost = async () => {
-      const { data: posts } = await axios.get('/api/v1/posts', {
-        params: { start: 0, limit: isSmallerDevice ? 5 : 10 },
-      });
-      setPosts(posts);
-    };
+   
 
     fetchPost();
   }, [isSmallerDevice]);
+  const fetchPost=async ()=>{
+    try {
+      const { data } = await axios.get('/api/v1/posts', {
+        params: { start, limit: isSmallerDevice ? 5 : 10 },
+      });
 
-  const handleClick = () => {
+      setPosts([...posts, ...data]); 
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  }
+
+  const handleClick =async () => {
     setIsLoading(true);
-
+    await fetchPost();
+    
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
@@ -61,7 +69,7 @@ export default function Posts() {
     <Container>
       <PostListContainer>
         {posts.map(post => (
-          <Post post={post} />
+          <Post post={post} key={post.id}/>
         ))}
       </PostListContainer>
 
