@@ -46,26 +46,39 @@ const Content = styled.div(() => ({
 
 const Button = styled.button(() => ({
   position: 'absolute',
-  top: '50%',
-  transform: 'translateY(-50%)',
+ top:"50%",
   backgroundColor: 'rgba(255, 255, 255, 0.5)',
   border: 'none',
   color: '#000',
   fontSize: '20px',
   cursor: 'pointer',
   height: '50px',
-  zIndex: 1,
 }));
 
 const PrevButton = styled(Button)`
-  left:10px;
-
+  left: 10px;
 `;
 
 const NextButton = styled(Button)`
-  right:10px;
-  
+  right: 10px;
 `;
+// const UserInfo = styled.div(() => ({
+//   position: 'absolute',
+//   top: '10px',
+//   left: '10px',
+//   display: 'flex',
+//   alignItems: 'center',
+//   fontSize: '14px',
+// }));
+
+// const UserName = styled.div(() => ({
+//   marginRight: '10px',
+//   fontWeight: 'bold',
+// }));
+
+// const UserEmail = styled.div(() => ({
+//   color: '#666',
+// }));
 
 const Post = ({ post }) => {
   const carouselRef = useRef(null);
@@ -74,6 +87,7 @@ const Post = ({ post }) => {
     if (carouselRef.current) {
       const scrollWidth = carouselRef.current.clientWidth;
       carouselRef.current.scrollBy({
+        
         left: scrollWidth,
         behavior: 'smooth',
       });
@@ -89,9 +103,13 @@ const Post = ({ post }) => {
       });
     }
   };
-
+  //const { firstName, lastName, email } = post.user;
   return (
     <PostContainer>
+      {/* <UserInfo>
+        <UserName>{`${firstName.charAt(0)}. ${lastName.charAt(0)}.`}</UserName>
+        <UserEmail>{post.user.email}</UserEmail>
+      </UserInfo> */}
       <CarouselContainer>
         <Carousel ref={carouselRef}>
           {post.images.map((image, index) => (
@@ -113,6 +131,11 @@ const Post = ({ post }) => {
 
 Post.propTypes = {
   post: PropTypes.shape({
+    user: PropTypes.shape({
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      email: PropTypes.string,
+    }),
     content: PropTypes.any,
     images: PropTypes.shape({
       map: PropTypes.func,
@@ -120,5 +143,7 @@ Post.propTypes = {
     title: PropTypes.any,
   }),
 };
+
+
 
 export default Post;
